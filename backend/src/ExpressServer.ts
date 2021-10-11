@@ -1,12 +1,12 @@
 import * as express from 'express';
-import { Payments } from './Controllers/payments';
 import * as cors from 'cors';
 import { MongoDatabase } from './config/db.config';
+import { PaymentGateway } from './PaymentGateway/PaymentGateway';
  
 export class ExpressServer {
     private server?: express.Express;
 
-    constructor(private paymentsEndpoints: Payments, private mongoDb: MongoDatabase) {}
+    constructor(private paymentsGateway: PaymentGateway, private mongoDb: MongoDatabase) {}
 
     public async setup(port: number) {
         const server = express();
@@ -30,10 +30,10 @@ export class ExpressServer {
     }
 
     private configureApiEndpoints(server: express.Express) {
-        server.get('/', this.paymentsEndpoints.index);
-        server.post('/api/payment-request', this.paymentsEndpoints.paymentRequest);
-        server.get('/api/callback', this.paymentsEndpoints.callback);
-        server.post('/api/refund', this.paymentsEndpoints.refund);
+        server.post('/api/payment-request', this.paymentsGateway.createOrder);
+        server.get('/api/callback', this.paymentsGateway.callback);
+        server.post('/api/refund', this.paymentsGateway.initiateRefund);
+        server.post('/api/cancel-order', this.paymentsGateway.cancelOrder);
     }
 
     public async callMongodb() {

@@ -1,0 +1,75 @@
+1. Post - createa a request - /payment-requests/
+
+var data = new Insta.PaymentData();
+ 
+data.purpose = "Test";            // REQUIRED
+data.amount = 9;                  // REQUIRED
+data.setRedirectUrl(REDIRECT_URL);
+ 
+Insta.createPayment(data, function(error, response) {
+  if (error) {
+    // some error
+  } else {
+    // Payment redirection link at response.payment_request.longurl
+    console.log(response);
+  }
+});
+
+2. Get - list of all requests - /payment-requests/
+
+Insta.getAllPaymentRequests(function(error, response) {
+  if (error) {
+    // Some error
+  } else {
+    console.log(response);
+  }
+});
+
+3. Get - Get payment status for a particular payment request id - /payment-requests/:id/
+
+Insta.getPaymentRequestStatus("PAYMENT-REQUEST-ID", function(error, response) {
+    if (error) {
+      // Some error
+    } else {
+      console.log(response);
+    }
+  });
+
+4. Get - Get payment details for a particular payment id and payment request id - /payment-requests/:id/:payment_id/
+
+Insta.getPaymentDetails("PAYMENT-REQUEST-ID", "PAYMENT-ID", function(error, response) {
+    if (error) {
+      // Some error
+    } else {
+      console.log(response);
+    }
+  });
+
+5. Post - Initiate refund - /refunds/
+
+var refund = new Insta.RefundRequest();
+refund.payment_id = '';     // This is the payment_id, NOT payment_request_id
+refund.type       = '';     // Available : ['RFD', 'TNR', 'QFL', 'QNR', 'EWN', 'TAN', 'PTH']
+refund.body       = '';     // Reason for refund
+refund.setRefundAmount(8);  // Optional, if you want to refund partial amount
+Insta.createRefund(refund, function(error, response) {
+  console.log(response);
+});
+
+6. get - Get refund status for a refund id - /refunds/:id/
+
+Insta.getRefundDetails("REFUND-ID", function(error, response) {
+    if (error) {
+      // Some error
+    } else {
+      // Refund status at response.refund.status
+      console.log(response);
+    }
+  });
+
+7. get - This endpoint returns the details of a payment related to a particular payment request.  - /payments/:id
+
+8. post - disable a request -/payment-requests/:id/disable/
+
+9. post - enable a request - /payment-requests/:id/enable/
+

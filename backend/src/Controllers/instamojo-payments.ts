@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 const Insta = require("instamojo-nodejs");
 import PaymentDetailsModel, {
   IPaymentDetails,
-} from "../models/payment-details-model";
+} from "../models/payment-details.model";
 
 interface paymentData {
   purpose: string;
@@ -17,10 +17,7 @@ interface paymentData {
   allow_repeated_payments: boolean;
 }
 
-export class Payments {
-  public index = (req: Request, res: Response) => {
-    res.send("hello, express");
-  };
+export class InstamojoPayments {
 
   public paymentRequest = (req: Request, res: Response) => {
     Insta.setKeys(
@@ -116,4 +113,8 @@ export class Payments {
       res.status(404).json({ message: "payment id does not exists" });
     }
   };
+
+  public cancelPayment = (req: Request, res: Response) => {
+
+  }
 }
